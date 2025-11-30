@@ -13,7 +13,7 @@
             color: #222;
         }
 
-        /* ÜST BANNER */
+        /* ÜST BANNER + BAŞLIK */
         header {
             text-align: center;
             background: #f0f8ff;
@@ -34,6 +34,7 @@
 
         header h1 {
             font-size: 22px;
+            margin-bottom: 4px;
             color: #1e4f8a;
         }
 
@@ -83,7 +84,10 @@
             font-size: 14px;
         }
 
-        textarea { resize: vertical; min-height: 100px; }
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
 
         .actions {
             margin-top: 12px;
@@ -103,7 +107,10 @@
         button:hover { background: #24569a; }
 
         /* YAZILAR */
-        .articles-empty { font-size: 14px; color: #666; }
+		.articles-empty {
+            font-size: 14px;
+            color: #666;
+        }
 
         .article-item {
             border-top: 1px solid #eee;
@@ -115,8 +122,8 @@
             display: flex;
             justify-content: space-between;
             align-items: baseline;
-            flex-wrap: wrap;
             gap: 8px;
+            flex-wrap: wrap;
         }
 
         .article-title {
@@ -131,8 +138,8 @@
 
         .article-content {
             margin-top: 6px;
-            white-space: pre-wrap;
             font-size: 14px;
+            white-space: pre-wrap;
         }
 
         .tag {
@@ -148,28 +155,66 @@
         .attachment-info {
             font-size: 12px;
             margin-top: 4px;
+            color: #444;
         }
 
-        .attachment-label { font-weight: bold; }
+        .attachment-label {
+            font-weight: bold;
+        }
 
-        /* YORUMLAR */
+        .top-info {
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 6px;
+        }
+
+        .reset-btn {
+            background: #e53e3e;
+            margin-top: 8px;
+        }
+
+        .reset-btn:hover {
+            background: #c53030;
+        }
+
+        /* Yorum alanı */
         .comments-section {
             margin-top: 8px;
             padding: 8px 10px;
             background: #f8fafc;
             border-radius: 6px;
             border: 1px solid #e2e8f0;
-            display: none;
+            display: none; /* DEFAULT KAPALI */
         }
 
         .comments-title {
             font-size: 14px;
             font-weight: bold;
-            color: #2b6cb0;
             margin-bottom: 4px;
+            color: #2b6cb0;
         }
 
         .comment-item {
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .comment-meta {
+            font-weight: bold;
+        }
+
+        .comment-text {
+            margin-left: 4px;
+        }
+
+        .comment-form {
+            margin-top: 6px;
+            border-top: 1px dashed #cbd5e0;
+            padding-top: 6px;
+        }
+
+        .comment-form input[type="text"],
+        .comment-form textarea {
             font-size: 13px;
             margin-bottom: 4px;
         }
@@ -179,39 +224,78 @@
             background: #4a5568;
         }
 
-        .toggle-comments-btn:hover { background: #2d3748; }
-
-        .reset-btn {
-            background: #e53e3e;
-            margin-top: 8px;
+        .toggle-comments-btn:hover {
+            background: #2d3748;
         }
 
-        .reset-btn:hover { background: #c53030; }
+        .delete-btn {
+            background: #e53e3e;
+            margin-top: 6px;
+            display: none; /* sadece admin-mode'da görünsün */
+        }
+
+        .delete-btn:hover {
+            background: #c53030;
+        }
+
+        body.admin-mode .delete-btn {
+            display: inline-block;
+        }
+
+        /* Admin panel butonu (sayfa altı) */
+        .admin-panel {
+            text-align: center;
+            margin: 10px 0 18px 0;
+            font-size: 12px;
+            color: #555;
+        }
+
+        .admin-panel button {
+            padding: 6px 10px;
+            font-size: 12px;
+            background: #4a5568;
+        }
+
+        .admin-panel button:hover {
+            background: #2d3748;
+        }
+
+        @media (max-width: 600px) {
+            header h1 { font-size: 18px; }
+            header p { font-size: 13px; }
+        }
     </style>
 </head>
 <body>
 
+<!-- ÜST BANNER -->
 <header>
-    <img src="banner.png" class="banner">
+    <!-- banner.png dosyan html ile aynı klasörde olmalı -->
+    <img src="banner.png" alt="T.C. Millî Eğitim Bakanlığı - Şehit Aytekin Kuru Anadolu Lisesi" class="banner">
+
     <div class="header-text">
         <h1>Şehit Aytekin Kuru Anadolu Lisesi</h1>
-        <p>ŞAKAL 9/A Tarih Blog - Öğrenci Yazıları</p>
+        <p>ŞAKAL 9/A Tarih Blog - Öğrenci yazıları, çalışmalar ve yorumlar</p>
     </div>
 </header>
 
 <div class="container">
+    <!-- Blog Gönderisi / Yazı Ekleme Formu -->
     <div class="card">
         <h2>Yeni Blog Yazısı Ekle</h2>
+        <p class="top-info">
+            Öğrenciler tarih konulu blog yazıları yazarak ve dosya ekleyerek çalışmalarını paylaşabilir.
+            Tüm yazılar, dosya bağlantıları ve yorumlar Supabase veritabanında saklanır ve herkes aynı veriyi görür.
+        </p>
 
         <form id="article-form">
+            <label for="student-name">Öğrenci Adı Soyadı</label>
+            <input type="text" id="student-name" required placeholder="Örn: Ayşe Yılmaz" />
 
-            <label>Öğrenci Adı Soyadı</label>
-            <input type="text" id="student-name" required placeholder="Örn: Ayşe Yılmaz">
+            <label for="article-title">Yazı / Blog Başlığı</label>
+            <input type="text" id="article-title" required placeholder="Örn: Orta Çağ'da Yaşam" />
 
-            <label>Başlık</label>
-            <input type="text" id="article-title" required placeholder="Örn: Orta Çağ'da Yaşam">
-
-            <label>Kategori</label>
+            <label for="article-category">Kategori (isteğe bağlı)</label>
             <select id="article-category">
                 <option value="">Seçiniz (isteğe bağlı)</option>
                 <option>İlk Çağ Tarihi</option>
@@ -219,258 +303,431 @@
                 <option>Yeni Çağ Tarihi</option>
                 <option>Yakın Çağ Tarihi</option>
                 <option>T.C. İnkılap Tarihi</option>
-                <option>Genel / Diğer</option>
+                <option>Genel Tarih / Diğer</option>
             </select>
 
-            <label>İçerik</label>
+            <label for="article-content">Yazı İçeriği (Blog Metni)</label>
             <textarea id="article-content" required placeholder="Tarih konulu blog yazınızı buraya yazın..."></textarea>
 
-            <label>Ek Dosya (isteğe bağlı)</label>
-            <input type="file" id="article-attachment" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.jpg,.png">
+            <label for="article-attachment">Çalışma / Dosya Ekle (isteğe bağlı)</label>
+            <input
+                type="file"
+                id="article-attachment"
+                accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.jpg,.jpeg,.png,.txt"
+            />
 
             <div class="actions">
                 <button type="submit" id="submit-btn">Yazıyı Yayınla</button>
             </div>
-
         </form>
     </div>
 
+    <!-- Blog Gönderileri Listesi -->
     <div class="card">
-        <h2>Paylaşılan Yazılar</h2>
+        <h2>Paylaşılan Blog Yazıları ve Çalışmalar</h2>
+        <p class="top-info">
+            Aşağıda Supabase veritabanından çekilen tüm blog yazıları listelenir.
+            Dosya eklenmişse tıklanabilir bağlantı olarak görünür.
+            Yorumlar varsayılan kapalıdır, “Yorumları Göster” ile açıp kapatabilirsiniz.
+        </p>
+
         <div id="articles-list"></div>
 
-        <button class="reset-btn" id="reset-data">Tüm Yazıları Sil (Öğretmen)</button>
+        <button class="reset-btn" id="reset-data">Tüm Yazıları Sil (veritabanı)</button>
     </div>
 </div>
 
+<!-- Sayfa Altında Küçük Admin Girişi -->
+<div class="admin-panel">
+    <span>Yönetici alanı:</span>
+    <button id="admin-login-btn">🔑 Admin Girişi</button>
+</div>
+
+<!-- Supabase JS (v2) CDN -->
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <script>
+    // Supabase bağlantı bilgileri
 const SUPABASE_URL = "https://pjiycigxwctovojadtqj.supabase.co";
 const SUPABASE_ANON_KEY =
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBqaXljaWd4d2N0b3ZvamFkdHFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ0MzkxNjAsImV4cCI6MjA4MDAxNTE2MH0.2LYwPmlv5H2s_qm7KBgHo_7SWRd19hMKk9F9QwBVnHQ";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Admin ayarları
+    const ADMIN_PASSWORD = "Ebola2005";
+    let isAdmin = false;
+    let openCommentsPostId = null; // hangi postun yorumları açıksa saklayalım
 
-// Öğretmen şifresi (DEĞİŞTİREBİLİRSİN)
-const ADMIN_PASSWORD = "12345";
+    const form = document.getElementById("article-form");
+    const submitBtn = document.getElementById("submit-btn");
+    const articlesList = document.getElementById("articles-list");
+    const resetBtn = document.getElementById("reset-data");
+    const attachmentInput = document.getElementById("article-attachment");
+    const adminLoginBtn = document.getElementById("admin-login-btn");
 
-const form = document.getElementById("article-form");
-const submitBtn = document.getElementById("submit-btn");
-const articlesList = document.getElementById("articles-list");
-const attachmentInput = document.getElementById("article-attachment");
-const resetBtn = document.getElementById("reset-data");
+    // Admin Girişi
+    adminLoginBtn.addEventListener("click", function () {
+        const pwd = prompt("Admin şifresini giriniz:");
+        if (pwd === ADMIN_PASSWORD) {
+            isAdmin = true;
+            document.body.classList.add("admin-mode");
+            alert("Admin girişi başarılı. Artık yazıları silebilirsiniz.");
+        } else if (pwd !== null) {
+            alert("Hatalı şifre!");
+        }
+    });
 
+    // Yazıları ve yorumları yükle
+    async function loadPosts() {
+        articlesList.innerHTML = "<p>Yazılar yükleniyor...</p>";
 
-// --- YAZILARI YÜKLE ---
-async function loadPosts() {
-    articlesList.innerHTML = "Yükleniyor...";
-
-    const { data: posts } = await supabase
-        .from("posts")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-    if (!posts || posts.length === 0) {
-        articlesList.innerHTML = "<p style='color:#666'>Henüz yazı yok.</p>";
-        return;
-    }
-
-    // Yorumları toplu çek
-    const ids = posts.map(x => x.id);
-    let commentsMap = {};
-
-    if (ids.length > 0) {
-        const { data: comments } = await supabase
-            .from("comments")
+        const { data: posts, error } = await supabase
+            .from("posts")
             .select("*")
-            .in("post_id", ids)
-            .order("created_at", { ascending: true });
+            .order("created_at", { ascending: false });
 
-        if (comments)
-            comments.forEach(c => {
-                if (!commentsMap[c.post_id]) commentsMap[c.post_id] = [];
-                commentsMap[c.post_id].push(c);
-            });
-    }
-
-    let html = "";
-    posts.forEach(p => {
-        const created = new Date(p.created_at).toLocaleString("tr-TR");
-        const comments = commentsMap[p.id] || [];
-
-        let cHtml = "";
-        if (comments.length === 0) {
-            cHtml = "<p style='font-size:12px;color:#666'>Yorum yok.</p>";
-        } else {
-            comments.forEach(c => {
-                cHtml += `
-                <div class="comment-item">
-                    <b>${c.author}</b>: ${c.text}
-                    <span style="font-size:11px;color:#888"> (${new Date(c.created_at).toLocaleString("tr-TR")})</span>
-                </div>`;
-            });
+        if (error) {
+            console.error(error);
+            articlesList.innerHTML = "<p class='articles-empty'>Yazılar yüklenirken hata oluştu.</p>";
+            return;
         }
 
-        html += `
-        <div class="article-item" id="post-${p.id}">
-            <div class="article-header">
-                <div>
-                    <span class="article-title">${p.title}</span>
-                    ${p.category ? `<span class="tag">${p.category}</span>` : ""}
-                </div>
-                <div class="article-meta">
-                    ${p.student} • ${created}
-                </div>
-            </div>
+        if (!posts || posts.length === 0) {
+            articlesList.innerHTML = "<p class='articles-empty'>Henüz hiç blog yazısı eklenmedi.</p>";
+            return;
+        }
 
-            <div class="article-content">${p.content}</div>
+        // Tüm post id'leri için yorumları tek seferde çek
+        const postIds = posts.map((p) => p.id);
+        const commentsMap = {};
 
-            ${p.attachment_url ?
-                `<div class="attachment-info"><b>Ek Dosya:</b> 
-                    <a href="${p.attachment_url}" target="_blank">${p.attachment_name}</a></div>` : ""}
-            
-            <button class="toggle-comments-btn" onclick="toggleComments('${p.id}', this)">
-                Yorumları Göster (${comments.length})
-            </button>
+        if (postIds.length > 0) {
+            const { data: comments, error: cErr } = await supabase
+                .from("comments")
+                .select("*")
+                .in("post_id", postIds)
+                .order("created_at", { ascending: true });
 
-            <div class="comments-section" id="comments-${p.id}">
-                <div class="comments-title">Yorumlar</div>
-                <div id="comments-list-${p.id}">${cHtml}</div>
-
-                <form onsubmit="return addComment('${p.id}')">
-                    <input type="text" id="comment-name-${p.id}" placeholder="Adınız">
-                    <textarea id="comment-text-${p.id}" placeholder="Yorumunuz" required></textarea>
-                    <div style="text-align:right;">
-                        <button type="submit" style="padding:6px 12px;background:#3182ce;">Gönder</button>
-                    </div>
-                </form>
-            </div>
-        </div>`;
-    });
-
-    articlesList.innerHTML = html;
-}
-
-loadPosts();
-
-// --- Yorum aç/kapa ---
-function toggleComments(id, btn) {
-    const div = document.getElementById("comments-" + id);
-    const hidden = div.style.display === "" || div.style.display === "none";
-
-    div.style.display = hidden ? "block" : "none";
-    btn.innerText = hidden
-        ? btn.innerText.replace("Göster", "Gizle")
-        : btn.innerText.replace("Gizle", "Göster");
-}
-
-
-// --- YORUM EKLE ---
-async function addComment(postId) {
-    const name = document.getElementById("comment-name-" + postId).value.trim() || "İsimsiz";
-    const text = document.getElementById("comment-text-" + postId).value.trim();
-
-    if (!text) return false;
-
-    await supabase.from("comments").insert({
-        post_id: postId,
-        author: name,
-        text
-    });
-
-    await loadPosts();
-
-    // tekrar açık bırakalım
-    const btn = document.querySelector(`#post-${postId} .toggle-comments-btn`);
-    if (btn) toggleComments(postId, btn);
-
-    return false;
-}
-
-
-// --- YAZI EKLE ---
-form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const student = document.getElementById("student-name").value.trim();
-    const title = document.getElementById("article-title").value.trim();
-    const category = document.getElementById("article-category").value;
-    const content = document.getElementById("article-content").value.trim();
-    const file = attachmentInput.files[0];
-
-    if (!student || !title || !content) {
-        alert("Lütfen gerekli alanları doldurun.");
-        return;
-    }
-
-    submitBtn.disabled = true;
-    submitBtn.innerText = "Kaydediliyor...";
-
-    let attachment_name = null;
-    let attachment_url = null;
-
-    try {
-        if (file) {
-            const filePath = `${Date.now()}_${file.name}`;
-
-            const { error: uploadError } =
-                await supabase.storage.from("attachments").upload(filePath, file);
-
-            if (uploadError) {
-                alert("Dosya yüklenirken hata oluştu.");
-            } else {
-                const { data } =
-                    supabase.storage.from("attachments").getPublicUrl(filePath);
-
-                attachment_name = file.name;
-                attachment_url = data.publicUrl;
+            if (!cErr && comments) {
+                comments.forEach((c) => {
+                    if (!commentsMap[c.post_id]) commentsMap[c.post_id] = [];
+                    commentsMap[c.post_id].push(c);
+                });
             }
         }
 
-        await supabase.from("posts").insert({
-            student, title, category, content,
-            attachment_name, attachment_url
+        let html = "";
+        posts.forEach((item) => {
+            const commentsArr = commentsMap[item.id] || [];
+            const commentCount = commentsArr.length;
+
+            let commentsHtml = "";
+            if (commentCount === 0) {
+                commentsHtml = '<p class="articles-empty" style="margin-bottom:4px;">Henüz yorum yok.</p>';
+            } else {
+                commentsArr.forEach((c) => {
+                    const dateStr = c.created_at
+                        ? new Date(c.created_at).toLocaleString("tr-TR")
+                        : "";
+                    commentsHtml += `
+                        <div class="comment-item">
+                            <span class="comment-meta">${c.author || "İsimsiz"}:</span>
+                            <span class="comment-text">${c.text || ""}</span>
+                            <span style="font-size:11px; color:#777;"> (${dateStr})</span>
+                        </div>
+                    `;
+                });
+            }
+
+            const created = item.created_at
+                ? new Date(item.created_at).toLocaleString("tr-TR")
+                : "";
+
+            html += `
+                <div class="article-item" id="post-${item.id}">
+                    <div class="article-header">
+                        <div>
+                            <span class="article-title">${item.title || ""}</span>
+                            ${item.category ? `<span class="tag">${item.category}</span>` : ""}
+                        </div>
+                        <div class="article-meta">
+                            ${item.student || ""} • ${created}
+                        </div>
+                    </div>
+                    <div class="article-content">
+                        ${makeLinksClickable(item.content || "")}
+                    </div>
+
+                    ${
+                        item.attachment_url
+                            ? `<div class="attachment-info">
+                                   <span class="attachment-label">Ekli dosya:</span>
+                                   <a href="${item.attachment_url}"
+                                      target="_blank" rel="noopener noreferrer">
+                                        ${item.attachment_name || "Dosyayı aç"}
+                                   </a>
+                               </div>`
+                            : ""
+                    }
+
+                    <button class="delete-btn"
+                            onclick="deletePost('${item.id}')">
+                        Bu Yazıyı Sil
+                    </button>
+
+                    <button class="toggle-comments-btn"
+                            onclick="toggleComments('${item.id}', this)">
+                        Yorumları Göster (${commentCount})
+                    </button>
+
+                    <div class="comments-section" id="comments-${item.id}">
+                        <div class="comments-title">Yorumlar</div>
+                        <div id="comments-list-${item.id}">
+                            ${commentsHtml}
+                        </div>
+
+                        <form class="comment-form" onsubmit="return addComment(event, '${item.id}')">
+                            <input type="text"
+                                   id="comment-name-${item.id}"
+                                   placeholder="Adınız (isteğe bağlı)" />
+                            <textarea id="comment-text-${item.id}"
+                                      placeholder="Yorumunuz..."
+                                      required></textarea>
+                            <div style="text-align:right;">
+                                <button type="submit" style="background:#3182ce;">Yorum Gönder</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            `;
         });
 
-        alert("Blog yazısı başarıyla eklendi.");
-        form.reset();
-        loadPosts();
+        articlesList.innerHTML = html;
 
-    } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerText = "Yazıyı Yayınla";
-    }
-});
-
-
-// --- TÜM YAZILARI SİL (SADECE ÖĞRETMEN) ---
-resetBtn.addEventListener("click", async () => {
-    const pw = prompt("Öğretmen şifresi:");
-    if (pw !== ADMIN_PASSWORD) {
-        alert("Şifre yanlış.");
-        return;
+        // Eğer önceden açık olan bir yorum bölümü varsa tekrar aç
+        if (openCommentsPostId) {
+            const btn = document.querySelector(
+                "#post-" + openCommentsPostId + " .toggle-comments-btn"
+            );
+            if (btn) {
+                toggleComments(openCommentsPostId, btn, true);
+            }
+        }
     }
 
-    if (!confirm("Tüm yazılar ve yorumlar silinsin mi?")) return;
-
-    // Yorumları sil
-    const { data: allComments } = await supabase.from("comments").select("id");
-    if (allComments && allComments.length > 0) {
-        const ids = allComments.map(c => c.id);
-        await supabase.from("comments").delete().in("id", ids);
-    }
-
-    // Yazıları sil
-    const { data: allPosts } = await supabase.from("posts").select("id");
-    if (allPosts && allPosts.length > 0) {
-        const ids = allPosts.map(p => p.id);
-        await supabase.from("posts").delete().in("id", ids);
-    }
-
-    alert("Tüm yazılar silindi.");
+    // Sayfa açılışında yazıları yükle
     loadPosts();
-});
+
+    // Yeni yazı ekle
+    form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const student = document.getElementById("student-name").value.trim();
+        const title = document.getElementById("article-title").value.trim();
+        const category = document.getElementById("article-category").value;
+        const content = document.getElementById("article-content").value.trim();
+        const attachmentFile = attachmentInput.files[0];
+
+        if (!student || !title || !content) {
+            alert("Lütfen öğrenci adı, başlık ve içerik alanlarını doldurun.");
+            return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Kaydediliyor...";
+
+        let attachment_name = null;
+        let attachment_url = null;
+
+        try {
+            // Eğer dosya varsa önce Storage'a yükle
+            if (attachmentFile) {
+                const filePath = `${Date.now()}_${attachmentFile.name}`;
+
+                const { error: uploadError } = await supabase
+                    .storage
+                    .from("attachments")
+                    .upload(filePath, attachmentFile);
+
+                if (uploadError) {
+                    console.error(uploadError);
+                    alert("Dosya yüklenirken hata oluştu.");
+                } else {
+                    const { data } = supabase
+                        .storage
+                        .from("attachments")
+                        .getPublicUrl(filePath);
+
+                    attachment_name = attachmentFile.name;
+                    attachment_url = data.publicUrl;
+                }
+            }
+
+            const { error: insertError } = await supabase.from("posts").insert({
+                student,
+                title,
+                category,
+                content,
+                attachment_name,
+                attachment_url
+            });
+
+            if (insertError) {
+                console.error(insertError);
+                alert("Yazı kaydedilirken hata oluştu.");
+            } else {
+                alert("Blog yazısı başarıyla eklendi.");
+                form.reset();
+                await loadPosts();
+            }
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Yazıyı Yayınla";
+        }
+    });
+
+    // Yorumları aç/kapa
+    function toggleComments(postId, btn, forceOpen) {
+        const section = document.getElementById("comments-" + postId);
+        if (!section) return;
+
+        const isHidden = section.style.display === "" || section.style.display === "none";
+
+        let willOpen = forceOpen ? true : isHidden;
+        section.style.display = willOpen ? "block" : "none";
+
+        const text = btn.innerText;
+        if (willOpen) {
+            btn.innerText = text.replace("Göster", "Gizle");
+            openCommentsPostId = postId;
+        } else {
+            btn.innerText = text.replace("Gizle", "Göster");
+            openCommentsPostId = null;
+        }
+    }
+
+    // Yorum ekle
+
+
+    async function addComment(e, postId) {
+        // Sayfanın yenilenmesini engelle
+        if (e && e.preventDefault) {
+            e.preventDefault();
+        }
+
+        const nameInput = document.getElementById("comment-name-" + postId);
+        const textInput = document.getElementById("comment-text-" + postId);
+
+        const author = (nameInput.value || "").trim() || "İsimsiz";
+        const text = (textInput.value || "").trim();
+
+        if (!text) {
+            alert("Lütfen yorum metni girin.");
+            return false;
+        }
+
+        const { error } = await supabase.from("comments").insert({
+            post_id: postId,
+            author,
+            text
+        });
+
+        if (error) {
+            console.error(error);
+            alert("Yorum kaydedilirken hata oluştu.");
+            return false;
+        }
+
+        // Formu temizle
+        nameInput.value = "";
+        textInput.value = "";
+
+        // Bu postun yorumları açık kalsın
+        openCommentsPostId = postId;
+        await loadPosts();
+
+        return false; // formun submit etmesini yine de engelle
+    }
+
+
+    function makeLinksClickable(text) {
+    if (!text) return "";
+
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    return text.replace(urlRegex, function (url) {
+        return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+    });
+}
+
+
+
+
+    // Tek bir yazıyı sil (sadece admin)
+    async function deletePost(postId) {
+        if (!isAdmin) {
+            alert("Bu işlemi sadece admin yapabilir.");
+            return;
+        }
+
+        if (!confirm("Bu blog yazısını ve tüm yorumlarını silmek istediğinize emin misiniz?")) {
+            return;
+        }
+
+        // Önce yorumları, sonra yazıyı sil
+        const { error: cErr } = await supabase
+            .from("comments")
+            .delete()
+            .eq("post_id", postId);
+
+        if (cErr) {
+            console.error(cErr);
+            alert("Yorumlar silinirken hata oluştu.");
+            return;
+        }
+
+        const { error: pErr } = await supabase
+            .from("posts")
+            .delete()
+            .eq("id", postId);
+
+        if (pErr) {
+            console.error(pErr);
+            alert("Yazı silinirken hata oluştu.");
+            return;
+        }
+
+        alert("Yazı ve yorumları silindi.");
+        await loadPosts();
+    }
+
+    // Tüm yazıları sil (sadece admin)
+    resetBtn.addEventListener("click", async function () {
+        if (!isAdmin) {
+            alert("Tüm yazıları silme işlemi sadece admin için geçerlidir.");
+            return;
+        }
+
+        if (!confirm("Tüm blog yazılarını ve yorumları veritabanından silmek istediğinize emin misiniz?")) {
+            return;
+        }
+
+        const { error: cErr } = await supabase.from("comments").delete().neq("id", null);
+        if (cErr) {
+            console.error(cErr);
+            alert("Yorumlar silinirken hata oluştu.");
+            return;
+        }
+
+        const { error: pErr } = await supabase.from("posts").delete().neq("id", null);
+        if (pErr) {
+            console.error(pErr);
+            alert("Yazılar silinirken hata oluştu.");
+            return;
+        }
+
+        alert("Tüm yazılar ve yorumlar silindi.");
+        loadPosts();
+    });
 </script>
 
 </body>
