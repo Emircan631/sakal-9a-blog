@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <title>ŞAKAL 9/A Tarih Blog - Şehit Aytekin Kuru Anadolu Lisesi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        /* ÜST BANNER */
+        header {
+            text-align: center;
+            background: #f0f8ff;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        header img.banner {
+            width: 100%;
+            max-height: 180px;
+            object-fit: cover;
+            display: block;
+        }
+
+        header .header-text {
+            padding: 10px 8px 14px 8px;
+        }
+
+        header h1 {
+            font-size: 22px;
+            color: #1e4f8a;
+        }
+
+        header p {
+            font-size: 14px;
+            color: #3571af;
+        }
+
+        /* ANA KUTULAR */
+        .container {
+            max-width: 900px;
+            margin: 0 auto 24px auto;
+            padding: 0 12px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        }
+
+        .card h2 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #2b6cb0;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            margin-top: 8px;
+            margin-bottom: 4px;
+            font-weight: bold;
+            color: #1e4f8a;
+        }
+
+        input[type="text"],
+        select,
+        textarea,
+        input[type="file"] {
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        textarea { resize: vertical; min-height: 100px; }
+
+        .actions {
+            margin-top: 12px;
+            text-align: right;
+        }
+
+        button {
+            background: #2b6cb0;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        button:hover { background: #24569a; }
+
+        /* YAZILAR */
+        .articles-empty { font-size: 14px; color: #666; }
+
+        .article-item {
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+
+        .article-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .article-title {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .article-meta {
+            font-size: 12px;
+            color: #555;
+        }
+
+        .article-content {
+            margin-top: 6px;
+            white-space: pre-wrap;
+            font-size: 14px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #edf2f7;
+            color: #2b6cb0;
+            border-radius: 12px;
+            padding: 2px 8px;
+            font-size: 11px;
+            margin-left: 4px;
+        }
+
+        .attachment-info {
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .attachment-label { font-weight: bold; }
+
+        /* YORUMLAR */
+        .comments-section {
+            margin-top: 8px;
+            padding: 8px 10px;
+            background: #f8fafc;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .comments-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #2b6cb0;
+            margin-bottom: 4px;
+        }
+
+        .comment-item {
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .toggle-comments-btn {
+            margin-top: 6px;
+            background: #4a5568;
+        }
+
+        .toggle-comments-btn:hover { background: #2d3748; }
+
+        .reset-btn {
+            background: #e53e3e;
+            margin-top: 8px;
+        }
+
+        .reset-btn:hover { background: #c53030; }
+    </style>
+</head>
+<body>
+
+<header>
+    <img src="banner.png" class="banner">
+    <div class="header-text">
+        <h1>Şehit Aytekin Kuru Anadolu Lisesi</h1>
+        <p>ŞAKAL 9/A Tarih Blog - Öğrenci Yazıları</p>
+    </div>
+</header>
+
+<div class="container">
+    <div class="card">
+        <h2>Yeni Blog Yazısı Ekle</h2>
+
+        <form id="article-form">
+
+            <label>Öğrenci Adı Soyadı</label>
+            <input type="text" id="student-name" required placeholder="Örn: Ayşe Yılmaz">
+
+            <label>Başlık</label>
+            <input type="text" id="article-title" required placeholder="Örn: Orta Çağ'da Yaşam">
+
+            <label>Kategori</label>
+            <select id="article-category">
+                <option value="">Seçiniz (isteğe bağlı)</option>
+                <option>İlk Çağ Tarihi</option>
+                <option>Orta Çağ Tarihi</option>
+                <option>Yeni Çağ Tarihi</option>
+                <option>Yakın Çağ Tarihi</option>
+                <option>T.C. İnkılap Tarihi</option>
+                <option>Genel / Diğer</option>
+            </select>
+
+            <label>İçerik</label>
+            <textarea id="article-content" required placeholder="Tarih konulu blog yazınızı buraya yazın..."></textarea>
+
+            <label>Ek Dosya (isteğe bağlı)</label>
+            <input type="file" id="article-attachment" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.jpg,.png">
+
+            <div class="actions">
+                <button type="submit" id="submit-btn">Yazıyı Yayınla</button>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Paylaşılan Yazılar</h2>
+        <div id="articles-list"></div>
+
+        <button class="reset-btn" id="reset-data">Tüm Yazıları Sil (Öğretmen)</button>
+    </div>
+</div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = "https://pjiycigxwctovojadtqj.supabase.co";
+const SUPABASE_ANON_KEY =
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBqaXljaWd4d2N0b3ZvamFkdHFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ0MzkxNjAsImV4cCI6MjA4MDAxNTE2MH0.2LYwPmlv5H2s_qm7KBgHo_7SWRd19hMKk9F9QwBVnHQ";
+
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// Öğretmen şifresi (DEĞİŞTİREBİLİRSİN)
+const ADMIN_PASSWORD = "12345";
+
+const form = document.getElementById("article-form");
+const submitBtn = document.getElementById("submit-btn");
+const articlesList = document.getElementById("articles-list");
+const attachmentInput = document.getElementById("article-attachment");
+const resetBtn = document.getElementById("reset-data");
+
+
+// --- YAZILARI YÜKLE ---
+async function loadPosts() {
+    articlesList.innerHTML = "Yükleniyor...";
+
+    const { data: posts } = await supabase
+        .from("posts")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+    if (!posts || posts.length === 0) {
+        articlesList.innerHTML = "<p style='color:#666'>Henüz yazı yok.</p>";
+        return;
+    }
+
+    // Yorumları toplu çek
+    const ids = posts.map(x => x.id);
+    let commentsMap = {};
+
+    if (ids.length > 0) {
+        const { data: comments } = await supabase
+            .from("comments")
+            .select("*")
+            .in("post_id", ids)
+            .order("created_at", { ascending: true });
+
+        if (comments)
+            comments.forEach(c => {
+                if (!commentsMap[c.post_id]) commentsMap[c.post_id] = [];
+                commentsMap[c.post_id].push(c);
+            });
+    }
+
+    let html = "";
+    posts.forEach(p => {
+        const created = new Date(p.created_at).toLocaleString("tr-TR");
+        const comments = commentsMap[p.id] || [];
+
+        let cHtml = "";
+        if (comments.length === 0) {
+            cHtml = "<p style='font-size:12px;color:#666'>Yorum yok.</p>";
+        } else {
+            comments.forEach(c => {
+                cHtml += `
+                <div class="comment-item">
+                    <b>${c.author}</b>: ${c.text}
+                    <span style="font-size:11px;color:#888"> (${new Date(c.created_at).toLocaleString("tr-TR")})</span>
+                </div>`;
+            });
+        }
+
+        html += `
+        <div class="article-item" id="post-${p.id}">
+            <div class="article-header">
+                <div>
+                    <span class="article-title">${p.title}</span>
+                    ${p.category ? `<span class="tag">${p.category}</span>` : ""}
+                </div>
+                <div class="article-meta">
+                    ${p.student} • ${created}
+                </div>
+            </div>
+
+            <div class="article-content">${p.content}</div>
+
+            ${p.attachment_url ?
+                `<div class="attachment-info"><b>Ek Dosya:</b> 
+                    <a href="${p.attachment_url}" target="_blank">${p.attachment_name}</a></div>` : ""}
+            
+            <button class="toggle-comments-btn" onclick="toggleComments('${p.id}', this)">
+                Yorumları Göster (${comments.length})
+            </button>
+
+            <div class="comments-section" id="comments-${p.id}">
+                <div class="comments-title">Yorumlar</div>
+                <div id="comments-list-${p.id}">${cHtml}</div>
+
+                <form onsubmit="return addComment('${p.id}')">
+                    <input type="text" id="comment-name-${p.id}" placeholder="Adınız">
+                    <textarea id="comment-text-${p.id}" placeholder="Yorumunuz" required></textarea>
+                    <div style="text-align:right;">
+                        <button type="submit" style="padding:6px 12px;background:#3182ce;">Gönder</button>
+                    </div>
+                </form>
+            </div>
+        </div>`;
+    });
+
+    articlesList.innerHTML = html;
+}
+
+loadPosts();
+
+// --- Yorum aç/kapa ---
+function toggleComments(id, btn) {
+    const div = document.getElementById("comments-" + id);
+    const hidden = div.style.display === "" || div.style.display === "none";
+
+    div.style.display = hidden ? "block" : "none";
+    btn.innerText = hidden
+        ? btn.innerText.replace("Göster", "Gizle")
+        : btn.innerText.replace("Gizle", "Göster");
+}
+
+
+// --- YORUM EKLE ---
+async function addComment(postId) {
+    const name = document.getElementById("comment-name-" + postId).value.trim() || "İsimsiz";
+    const text = document.getElementById("comment-text-" + postId).value.trim();
+
+    if (!text) return false;
+
+    await supabase.from("comments").insert({
+        post_id: postId,
+        author: name,
+        text
+    });
+
+    await loadPosts();
+
+    // tekrar açık bırakalım
+    const btn = document.querySelector(`#post-${postId} .toggle-comments-btn`);
+    if (btn) toggleComments(postId, btn);
+
+    return false;
+}
+
+
+// --- YAZI EKLE ---
+form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const student = document.getElementById("student-name").value.trim();
+    const title = document.getElementById("article-title").value.trim();
+    const category = document.getElementById("article-category").value;
+    const content = document.getElementById("article-content").value.trim();
+    const file = attachmentInput.files[0];
+
+    if (!student || !title || !content) {
+        alert("Lütfen gerekli alanları doldurun.");
+        return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.innerText = "Kaydediliyor...";
+
+    let attachment_name = null;
+    let attachment_url = null;
+
+    try {
+        if (file) {
+            const filePath = `${Date.now()}_${file.name}`;
+
+            const { error: uploadError } =
+                await supabase.storage.from("attachments").upload(filePath, file);
+
+            if (uploadError) {
+                alert("Dosya yüklenirken hata oluştu.");
+            } else {
+                const { data } =
+                    supabase.storage.from("attachments").getPublicUrl(filePath);
+
+                attachment_name = file.name;
+                attachment_url = data.publicUrl;
+            }
+        }
+
+        await supabase.from("posts").insert({
+            student, title, category, content,
+            attachment_name, attachment_url
+        });
+
+        alert("Blog yazısı başarıyla eklendi.");
+        form.reset();
+        loadPosts();
+
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Yazıyı Yayınla";
+    }
+});
+
+
+// --- TÜM YAZILARI SİL (SADECE ÖĞRETMEN) ---
+resetBtn.addEventListener("click", async () => {
+    const pw = prompt("Öğretmen şifresi:");
+    if (pw !== ADMIN_PASSWORD) {
+        alert("Şifre yanlış.");
+        return;
+    }
+
+    if (!confirm("Tüm yazılar ve yorumlar silinsin mi?")) return;
+
+    // Yorumları sil
+    const { data: allComments } = await supabase.from("comments").select("id");
+    if (allComments && allComments.length > 0) {
+        const ids = allComments.map(c => c.id);
+        await supabase.from("comments").delete().in("id", ids);
+    }
+
+    // Yazıları sil
+    const { data: allPosts } = await supabase.from("posts").select("id");
+    if (allPosts && allPosts.length > 0) {
+        const ids = allPosts.map(p => p.id);
+        await supabase.from("posts").delete().in("id", ids);
+    }
+
+    alert("Tüm yazılar silindi.");
+    loadPosts();
+});
+</script>
+
+</body>
+</html>
