@@ -228,6 +228,39 @@
             background: #2d3748;
         }
 
+        /* Komut Silme */
+        .comment-actions {
+            display: inline-block;
+            margin-left: 6px;
+            font-size: 11px;
+        }
+
+        .comment-actions button {
+            padding: 2px 6px;
+            font-size: 11px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            margin-left: 4px;
+        }
+
+        .comment-delete-btn {
+            background: #e53e3e;
+            color: #fff;
+            display: none; /* sadece admin'de görünsün */
+        }
+
+        .comment-delete-btn:hover {
+            background: #c53030;
+        }
+
+        /* Admin modunda yorum silme butonu görünsün */
+        body.admin-mode .comment-delete-btn {
+            display: inline-block;
+        }
+        /*Komut Silme Son*/
+
+
         .delete-btn {
             background: #e53e3e;
             margin-top: 6px;
@@ -264,6 +297,8 @@
             header h1 { font-size: 18px; }
             header p { font-size: 13px; }
         }
+
+
     </style>
 </head>
 <body>
@@ -426,17 +461,28 @@ const SUPABASE_ANON_KEY =
                 commentsHtml = '<p class="articles-empty" style="margin-bottom:4px;">Henüz yorum yok.</p>';
             } else {
                 commentsArr.forEach((c) => {
-                    const dateStr = c.created_at
-                        ? new Date(c.created_at).toLocaleString("tr-TR")
-                        : "";
-                    commentsHtml += `
-                        <div class="comment-item">
+                const dateStr = c.created_at
+                    ? new Date(c.created_at).toLocaleString("tr-TR")
+                    : "";
+
+                commentsHtml += `
+                        <div class="comment-item" id="comment-${c.id}">
                             <span class="comment-meta">${c.author || "İsimsiz"}:</span>
                             <span class="comment-text">${c.text || ""}</span>
                             <span style="font-size:11px; color:#777;"> (${dateStr})</span>
+
+                            <span class="comment-actions">
+                                <button
+                                    type="button"
+                                    class="comment-delete-btn"
+                                    onclick="deleteComment('${c.id}', '${item.id}')">
+                                    Sil
+                                </button>
+                            </span>
                         </div>
                     `;
                 });
+
             }
 
             const created = item.created_at
@@ -697,6 +743,32 @@ const SUPABASE_ANON_KEY =
         }
 
         alert("Yazı ve yorumları silindi.");
+        await loadPosts();
+    }
+
+    async function deleteComment(commentId, postId) {
+        if (!isAdmin) {
+            alert("Yorum silme işlemi sadece admin içindir.");
+            return;
+        }
+
+        if (!confirm("Bu yorumu silmek istediğinize emin misiniz?")) {
+            return;
+        }
+
+        const { error } = await supabase
+            .from("comments")
+            .delete()
+            .eq("id", commentId);
+
+        if (error) {
+            console.error(error);
+            alert("Yorum silinirken hata oluştu.");
+            return;
+        }
+
+        // Aynı yazının yorumları açık kalsın, sayı güncellensin
+        openCommentsPostId = postId;
         await loadPosts();
     }
 
